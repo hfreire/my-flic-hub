@@ -11,6 +11,7 @@ const SERVER_PORT = process.env.FLIC_SERVER_PORT || 5551
 const _ = require('lodash')
 
 const Logger = require('modern-logger')
+const Health = require('health-checkup')
 
 const { FlicClient, FlicConnectionChannel } = require('../share/flic')
 
@@ -26,6 +27,12 @@ const defaultOptions = {
 class FlicWrapper {
   constructor (options = {}) {
     this._options = _.defaultsDeep({}, options, defaultOptions)
+
+    Health.addCheck('flic', async () => {
+      if (!this._client) {
+        throw new Error('Unable to connect to flic daemon')
+      }
+    })
   }
 
   start () {

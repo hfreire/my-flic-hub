@@ -53,7 +53,7 @@ RUN chmod +x /start.sh
 COPY share/docker/test.sh /test.sh
 RUN chmod +x /test.sh
 
-EXPOSE 3000
+EXPOSE 3000 5551
 ENTRYPOINT [ "/start.sh" ]
 
 HEALTHCHECK --start-period=10s --interval=5m --timeout=3s \

@@ -7,17 +7,27 @@
 
 const { Serverful } = require('serverful')
 
+const Logger = require('modern-logger')
+
 const FlicWrapper = require('./flic-wrapper')
 
 class Server extends Serverful {
   async start () {
     await super.start()
 
-    FlicWrapper.start()
+    try {
+      FlicWrapper.start()
+    } catch (error) {
+      Logger.error(error)
+    }
   }
 
   async stop () {
-    FlicWrapper.stop()
+    try {
+      FlicWrapper.stop()
+    } catch (error) {
+      Logger.error(error)
+    }
 
     await super.stop()
   }

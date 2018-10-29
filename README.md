@@ -12,9 +12,9 @@
 Using it in your terminal requires [Docker](https://www.docker.com) installed in your system.
 
 ##### Run the Docker image in a container 
-Detach from the container and expose port `6731`.
+Detach from the container and expose port `3000`.
 ```
-docker run -d -p "6731:3000" hfreire/my-flic-hub
+docker run -d --cap-add NET_ADMIN --net=host hfreire/my-flic-hub
 ```
 
 #### Available REST API endpoints
