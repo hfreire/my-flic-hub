@@ -12,6 +12,7 @@ ARG VERSION_COMMIT
 ENV VERSION_COMMIT $VERSION_COMMIT
 ARG VERSION_BUILD_DATE
 ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
+ENV FLICD_VERSION 0.5
 ENV FLICD_SHA256 "19a9f6e8ceff648d7314c3dacf4e034cf77843cf760efd2bb850ffc53c254e79"
 
 # Create app directory
@@ -23,11 +24,16 @@ WORKDIR $HOME
 RUN apk add --update \
   git \
   netcat-openbsd \
+  libc6-compat \
   curl \
   unzip
-RUN curl -fSL "https://github.com/50ButtonsEach/fliclib-linux-hci/archive/0.5.zip" -o flicd.zip && \
-  echo "$FLICD_SHA256 *flicd.zip" | sha256sum -c - && \
-  unzip -d /opt/$NAME flicd.zip
+RUN curl -fSL "https://github.com/50ButtonsEach/fliclib-linux-hci/archive/$FLICD_VERSION.zip" -o /tmp/flicd.zip && \
+  echo "$FLICD_SHA256 */tmp/flicd.zip" | sha256sum -c - && \
+  unzip -d /tmp /tmp/flicd.zip && \
+  mv /tmp/fliclib-linux-hci-$FLICD_VERSION/bin/armv6l/flicd /usr/local/bin/flicd && \
+  mkdir -p /var/lib/flic && \
+  rm -rf /tmp/fliclib-linux-hci-$FLICD_VERSION && \
+  rm /tmp/flicd.zip
 COPY package.json $HOME
 RUN npm install --production
 

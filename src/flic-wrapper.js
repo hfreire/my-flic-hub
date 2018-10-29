@@ -26,7 +26,6 @@ const defaultOptions = {
 class FlicWrapper {
   constructor (options = {}) {
     this._options = _.defaultsDeep({}, options, defaultOptions)
-
   }
 
   start () {
@@ -46,7 +45,7 @@ class FlicWrapper {
       this._client.on('newVerifiedButton', (bdAddr) => {
         Logger.info('A new button was added: ' + bdAddr)
 
-        listenToButton(bdAddr)
+        this.listenToButton(bdAddr)
       })
 
       this._client.on('error', (error) => Logger.error(error))
