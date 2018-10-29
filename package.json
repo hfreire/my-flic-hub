@@ -1,0 +1,90 @@
+{
+  "name": "my-flic-hub",
+  "description": "",
+  "version": "0.0.0",
+  "engines": {
+    "node": ">= 10.11"
+  },
+  "author": "Hugo Freire <hugo@exec.sh>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hfreire/my-flic-hub.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hfreire/my-flic-hub/issues"
+  },
+  "homepage": "https://github.com/hfreire/my-flic-hub#readme",
+  "dependencies": {
+    "health-checkup": "1.0.19",
+    "lodash": "4.17.11",
+    "modern-logger": "1.5.28",
+    "serverful": "1.4.5"
+  },
+  "devDependencies": {
+    "coveralls": "2.13.3",
+    "eslint": "5.0.1",
+    "eslint-config-hfreire": "1.1.3",
+    "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-jest": "21.26.2",
+    "eslint-plugin-json": "1.2.1",
+    "eslint-plugin-mocha": "5.2.0",
+    "eslint-plugin-node": "8.0.0",
+    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-standard": "4.0.0",
+    "eslint-plugin-unicorn": "6.0.1",
+    "jest": "22.4.2",
+    "npm-merge-driver": "2.3.5",
+    "pre-git": "3.17.1",
+    "semantic-release": "15.10.6"
+  },
+  "config": {
+    "pre-git": {
+      "commit-msg": "conventional",
+      "allow-untracked-files": true
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "resetMocks": true,
+    "resetModules": true,
+    "testMatch": [
+      "<rootDir>/test/**.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "./test/helper.js"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  },
+  "release": {
+    "publish": [
+      {
+        "path": "@semantic-release/npm",
+        "npmPublish": false
+      },
+      "@semantic-release/github"
+    ],
+    "analyzeCommits": "simple-commit-message"
+  },
+  "scripts": {
+    "eslint": "node_modules/.bin/eslint --ext .json --ext .js .",
+    "jest": "./node_modules/.bin/jest",
+    "docker:build": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/build",
+    "docker:push": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/push",
+    "docker:test": "./share/docker/scripts/test",
+    "terraform:deploy": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/terraform/scripts/deploy",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "semantic-release": "./node_modules/.bin/semantic-release",
+    "clean": "rm -rf coverage",
+    "lint": "npm run eslint",
+    "test": "npm run clean && npm run lint && npm run jest",
+    "commit": "./node_modules/.bin/commit-wizard",
+    "build": "npm run docker:build",
+    "push": "npm run docker:push",
+    "start": "node src/app.js"
+  }
+}
