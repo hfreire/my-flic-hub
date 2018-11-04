@@ -8,6 +8,9 @@
 const { Serverful } = require('serverful')
 
 const Logger = require('modern-logger')
+Logger.configure({ enableEmoji: false })
+
+const Database = require('./database')
 
 const FlicWrapper = require('./flic-wrapper')
 
@@ -15,11 +18,11 @@ class Server extends Serverful {
   async start () {
     await super.start()
 
-    try {
-      FlicWrapper.start()
-    } catch (error) {
-      Logger.error(error)
-    }
+    await Database.start()
+
+    FlicWrapper.start()
+    FlicWrapper.on('ButtonUp', (bdAddr) => Logger.info(`ButtonUp ${bdAddr}`))
+    FlicWrapper.on('ButtonDown', (bdAddr) => Logger.info(`ButtonDown ${bdAddr}`))
   }
 
   async stop () {

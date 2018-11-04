@@ -8,12 +8,43 @@
 const SERVER_HOST = process.env.FLIC_SERVER_HOST || 'localhost'
 const SERVER_PORT = process.env.FLIC_SERVER_PORT || 5551
 
+const EventEmitter = require('events')
+
 const _ = require('lodash')
 
 const Logger = require('modern-logger')
 const Health = require('health-checkup')
 
 const { FlicClient, FlicConnectionChannel } = require('../share/flic')
+
+const listenToButton = function (bdAddr) {
+  if (!bdAddr) {
+    throw new Error('invalid arguments')
+  }
+
+  const connectionChannel = new FlicConnectionChannel(bdAddr)
+  this._client.addConnectionChannel(connectionChannel)
+
+  connectionChannel.on('buttonUpOrDown', (clickType, wasQueued, timeDiff) => {
+    if (wasQueued) {
+      Logger.debug(`Discarding ${clickType} from button ${bdAddr} because it was queued`)
+
+      return
+    }
+
+    if (timeDiff > 3) {
+      Logger.debug(`Discarding ${clickType} from button ${bdAddr} because the time difference was ${timeDiff}`)
+
+      return
+    }
+
+    this.emit(clickType, bdAddr)
+  })
+
+  connectionChannel.on('connectionStatusChanged', (connectionStatus, disconnectReason) => {
+    Logger.debug(bdAddr + ' ' + connectionStatus + (connectionStatus === 'Disconnected' ? ' ' + disconnectReason : ''))
+  })
+}
 
 const defaultOptions = {
   flic: {
@@ -24,8 +55,10 @@ const defaultOptions = {
   }
 }
 
-class FlicWrapper {
+class FlicWrapper extends EventEmitter {
   constructor (options = {}) {
+    super()
+
     this._options = _.defaultsDeep({}, options, defaultOptions)
 
     Health.addCheck('flic', async () => {
@@ -45,14 +78,14 @@ class FlicWrapper {
     this._client.once('ready', () => {
       Logger.info('Connected to flic server!')
 
-      this._client.getInfo((info) => info.bdAddrOfVerifiedButtons.forEach((bdAddr) => this.listenToButton(bdAddr)))
+      this._client.getInfo((info) => info.bdAddrOfVerifiedButtons.forEach((bdAddr) => listenToButton.bind(this)(bdAddr)))
 
       this._client.on('bluetoothControllerStateChange', (state) => Logger.info('Bluetooth controller state change: ' + state))
 
       this._client.on('newVerifiedButton', (bdAddr) => {
         Logger.info('A new button was added: ' + bdAddr)
 
-        this.listenToButton(bdAddr)
+        this.listenToButton.bind(this)(bdAddr)
       })
 
       this._client.on('error', (error) => Logger.error(error))
@@ -69,23 +102,6 @@ class FlicWrapper {
     }
 
     this._client.close()
-  }
-
-  listenToButton (bdAddr) {
-    if (!bdAddr) {
-      throw new Error('invalid arguments')
-    }
-
-    const connectionChannel = new FlicConnectionChannel(bdAddr)
-    this._client.addConnectionChannel(connectionChannel)
-
-    connectionChannel.on('buttonUpOrDown', (clickType, wasQueued, timeDiff) => {
-      Logger.debug(bdAddr + ' ' + clickType + ' ' + (wasQueued ? 'wasQueued' : 'notQueued') + ' ' + timeDiff + ' seconds ago')
-    })
-
-    connectionChannel.on('connectionStatusChanged', (connectionStatus, disconnectReason) => {
-      Logger.debug(bdAddr + ' ' + connectionStatus + (connectionStatus === 'Disconnected' ? ' ' + disconnectReason : ''))
-    })
   }
 }
 
