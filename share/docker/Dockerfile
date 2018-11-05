@@ -29,6 +29,7 @@ RUN apk --no-cache add --update \
 
 # Install deps
 COPY package.json package.json
+COPY package-lock.json package-lock.json
 RUN apk --no-cache add --virtual .build-deps \
     g++ \
     libc-dev \
@@ -37,7 +38,8 @@ RUN apk --no-cache add --virtual .build-deps \
     git \
   && npm install --production --unsafe-perm \
   && apk del .build-deps \
-  && rm package.json
+  && rm package.json \
+  && rm package-lock.json
 
 # Install flicd
 ENV FLICD_VERSION 0.5
