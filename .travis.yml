@@ -28,7 +28,7 @@ before_script:
 - greenkeeper-lockfile-update
 script:
 - |
-  docker run --rm --privileged multiarch/qemu-user-static:register --reset \
+  docker run --rm --privileged multiarch/qemu-user-static:register --reset && \
   npm test && \
   npm run build && \
   npm run docker:test
