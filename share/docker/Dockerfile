@@ -24,9 +24,7 @@ COPY share/docker/start.sh start.sh
 COPY share/docker/test.sh test.sh
 
 # Install utils
-RUN apk --no-cache add --update \
-    curl \
-    netcat-openbsd
+RUN apk --no-cache add --update curl netcat-openbsd
 
 # Install deps
 COPY package.json package.json
