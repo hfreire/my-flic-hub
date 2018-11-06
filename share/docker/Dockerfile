@@ -14,6 +14,7 @@ ARG VERSION_BUILD_DATE
 ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 
 # Set work directory
+ENV HOME /home/node
 WORKDIR $HOME/$NAME
 
 # Copy source
