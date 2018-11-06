@@ -1,5 +1,4 @@
-dist: trusty
-sudo: false
+sudo: required
 language: node_js
 env:
   global:
@@ -28,11 +27,9 @@ before_script:
 - npm prune
 - greenkeeper-lockfile-update
 script:
-- |
-  npm test && \
-  docker run --rm --privileged multiarch/qemu-user-static:register --reset && \
-  npm run build && \
-  npm run docker:test
+- npm test
+- npm run build
+- npm run docker:test
 after_success:
 - npm run coveralls
 - npm run semantic-release
