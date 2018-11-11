@@ -2,4 +2,4 @@
 
 flicd -f /var/lib/flic/flicd.db -s 0.0.0.0 &
 
-node src/app.js
+exec su-exec node node src/app.js

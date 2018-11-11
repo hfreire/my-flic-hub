@@ -7,7 +7,7 @@ env:
 services:
 - docker
 node_js:
-- 10.11
+- 10.13
 cache:
   directories:
   - node_modules
@@ -27,9 +27,10 @@ before_script:
 - npm prune
 - greenkeeper-lockfile-update
 script:
-- npm test
-- npm run build
-- npm run docker:test
+- |
+  npm test && \
+  npm run build && \
+  npm run docker:test
 after_success:
 - npm run coveralls
 - npm run semantic-release

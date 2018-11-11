@@ -5,6 +5,8 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
+const NAME = process.env.NAME
+
 const _ = require('lodash')
 
 const Sequelize = require('sequelize')
@@ -15,7 +17,7 @@ const { join } = require('path')
 const defaultOptions = {
   database: {
     pathDir: join(__dirname, '../tmp'),
-    filename: 'my-flic-hub.db'
+    filename: `${NAME}.db`
   }
 }
 
@@ -33,9 +35,25 @@ class Database {
     this._models = {
       buttons: this._sequelize.define('buttons', {
         id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
-        bdAddr: { type: Sequelize.STRING, allowNull: false }
+        bdAddr: { type: Sequelize.STRING, allowNull: false },
+        clickActionId: { type: Sequelize.UUID },
+        doubleClickActionId: { type: Sequelize.UUID },
+        holdActionId: { type: Sequelize.UUID }
+      }),
+      actions: this._sequelize.define('actions', {
+        id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+        type: { type: Sequelize.STRING, allowNull: false },
+        parameters: { type: Sequelize.STRING }
       })
     }
+  }
+
+  get buttons () {
+    return this._models[ 'buttons' ]
+  }
+
+  get actions () {
+    return this._models[ 'actions' ]
   }
 
   async start () {
@@ -47,9 +65,7 @@ class Database {
 
     await this._sequelize.authenticate()
 
-    _.forEach(_.keys(this._models), async (modelName) => {
-      return this._models[ modelName ].sync()
-    })
+    _.forEach(_.keys(this._models), async (modelName) => this._models[ modelName ].sync())
   }
 }
 

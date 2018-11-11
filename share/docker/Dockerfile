@@ -1,8 +1,8 @@
-FROM arm32v6/node:10.11-alpine
+FROM arm32v6/node:10.13-alpine
 
 MAINTAINER hugo@exec.sh
 
-# Set runtime environment variables
+# Set app runtime environment variables
 ARG NPM_TOKEN
 ARG NAME
 ENV NAME $NAME
@@ -13,40 +13,40 @@ ENV VERSION_COMMIT $VERSION_COMMIT
 ARG VERSION_BUILD_DATE
 ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 
-# Set work directory
-ENV HOME /home/node
-WORKDIR $HOME/$NAME
-
-# Copy source
-COPY src src/
-COPY share/flic share/flic/
-COPY share/docker/start.sh start.sh
-COPY share/docker/test.sh test.sh
+# Create app directory
+RUN mkdir -p /home/node/$NAME \
+  && chown node:node /home/node/$NAME
+WORKDIR /home/node/$NAME
 
 # Install utils
-RUN apk --no-cache add --update \
+RUN apk --no-cache add \
+    su-exec \
     curl \
     netcat-openbsd
 
-# Install deps
-COPY package.json package.json
-COPY package-lock.json package-lock.json
-RUN apk --no-cache add --virtual .build-deps \
+# Copy app source
+COPY --chown=node:node package.json package.json
+COPY --chown=node:node package-lock.json package-lock.json
+COPY --chown=node:node src src/
+COPY --chown=node:node share/flic share/flic/
+COPY --chown=node:node share/docker/start.sh start.sh
+COPY --chown=node:node share/docker/test.sh test.sh
+
+# Install npm packages
+RUN apk --no-cache add --virtual .npm-deps \
     g++ \
     libc-dev \
     make \
     python \
     git \
-  && npm install --production --unsafe-perm \
-  && apk del .build-deps \
-  && rm package.json \
-  && rm package-lock.json
+  && su-exec node npm install --production \
+  && apk del .npm-deps
 
 # Install flicd
 ENV FLICD_VERSION 0.5
-RUN apk --no-cache add --update \
+RUN apk --no-cache add \
     libc6-compat \
-  && apk --no-cache add --virtual .build-deps \
+  && apk --no-cache add --virtual .flicd-deps \
     unzip \
   && curl -fSL "https://github.com/50ButtonsEach/fliclib-linux-hci/archive/$FLICD_VERSION.zip" -o /tmp/flicd.zip \
   && echo "19a9f6e8ceff648d7314c3dacf4e034cf77843cf760efd2bb850ffc53c254e79 */tmp/flicd.zip" | sha256sum -c - \
@@ -55,7 +55,7 @@ RUN apk --no-cache add --update \
   && mkdir -p /var/lib/flic \
   && rm -rf /tmp/fliclib-linux-hci-$FLICD_VERSION \
   && rm /tmp/flicd.zip \
-  && apk del .build-deps
+  && apk del .flicd-deps
 
 EXPOSE 3000 5551
 

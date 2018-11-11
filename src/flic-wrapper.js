@@ -15,12 +15,14 @@ const _ = require('lodash')
 const Logger = require('modern-logger')
 const Health = require('health-checkup')
 
-const { FlicClient, FlicConnectionChannel } = require('../share/flic')
+const { FlicClient, FlicConnectionChannel, FlicScanWizard } = require('../share/flic')
 
 const listenToButton = function (bdAddr) {
   if (!bdAddr) {
     throw new Error('invalid arguments')
   }
+
+  this.emit('ButtonDiscovered', bdAddr)
 
   const connectionChannel = new FlicConnectionChannel(bdAddr)
   this._client.addConnectionChannel(connectionChannel)
@@ -44,6 +46,28 @@ const listenToButton = function (bdAddr) {
   connectionChannel.on('connectionStatusChanged', (connectionStatus, disconnectReason) => {
     Logger.debug(bdAddr + ' ' + connectionStatus + (connectionStatus === 'Disconnected' ? ' ' + disconnectReason : ''))
   })
+}
+
+const buildScanWizard = () => {
+  const scanWizard = new FlicScanWizard()
+
+  scanWizard.on('foundPrivateButton', () => {
+    console.log('Your button is private. Hold down for 7 seconds to make it public.')
+  })
+  scanWizard.on('foundPublicButton', (bdAddr, name) => {
+    console.log('Found public button ' + bdAddr + ' (' + name + '). Now connecting...')
+  })
+  scanWizard.on('buttonConnected', (bdAddr, name) => {
+    console.log('Button connected. Now verifying and pairing...')
+  })
+  scanWizard.on('completed', (result, bdAddr, name) => {
+    console.log('Completed with result: ' + result)
+    if (result === 'WizardSuccess') {
+      console.log('Your new button is ' + bdAddr)
+    }
+  })
+
+  return scanWizard
 }
 
 const defaultOptions = {
@@ -76,30 +100,29 @@ class FlicWrapper extends EventEmitter {
     this._client = new FlicClient(_.get(this._options, 'flic.server.host'), _.get(this._options, 'flic.server.port'))
 
     this._client.once('ready', () => {
-      Logger.info('Connected to flic server!')
+      Logger.debug('Connected to flic server')
 
       this._client.getInfo((info) => info.bdAddrOfVerifiedButtons.forEach((bdAddr) => listenToButton.bind(this)(bdAddr)))
 
+      this._client.on('newVerifiedButton', (bdAddr) => listenToButton.bind(this)(bdAddr))
+
       this._client.on('bluetoothControllerStateChange', (state) => Logger.info('Bluetooth controller state change: ' + state))
-
-      this._client.on('newVerifiedButton', (bdAddr) => {
-        Logger.info('A new button was added: ' + bdAddr)
-
-        this.listenToButton.bind(this)(bdAddr)
-      })
 
       this._client.on('error', (error) => Logger.error(error))
 
-      this._client.on('close', (hadError) => {
-        Logger.info('Connection to daemon is now closed')
-      })
+      this._client.on('close', () => Logger.info('Disconnected from flic server'))
     })
+
+    this._scanWizard = buildScanWizard()
+    this._client.addScanWizard(this._scanWizard)
   }
 
   stop () {
     if (!this._client) {
       return
     }
+
+    this._client.cancelScanWizard(this._scanWizard)
 
     this._client.close()
   }
