@@ -11,7 +11,7 @@ git clone https://github.com/my-github-username/my-flic-hub
 
 Change current directory
 ```
-cd get-me-date
+cd my-flic-hub
 ```
 
 Install NPM dependencies

@@ -41,9 +41,18 @@ class Database {
         holdActionId: { type: Sequelize.UUID }
       }),
       actions: this._sequelize.define('actions', {
-        id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+        id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4, allowNull: false },
         type: { type: Sequelize.STRING, allowNull: false },
-        parameters: { type: Sequelize.STRING }
+        parameters: {
+          type: Sequelize.TEXT,
+          defaultValue: null,
+          get: function () {
+            return !this.getDataValue('parameters') ? null : JSON.parse(this.getDataValue('parameters'))
+          },
+          set: function (value) {
+            this.setDataValue('parameters', value === null ? null : JSON.stringify(value))
+          }
+        }
       })
     }
   }

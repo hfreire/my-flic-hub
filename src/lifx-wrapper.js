@@ -25,9 +25,9 @@ class LifxWrapper extends EventEmitter {
 
     this._options = _.defaultsDeep({}, options, defaultOptions)
 
-    this._client = new Client(_.get(this._options, 'lifx'))
+    this._client = new Client()
 
-    this._client.init()
+    this._client.init(_.get(this._options, 'lifx'))
 
     this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
     this._client.on('light-online', (light) => this.emit('LightOnline', light))
@@ -46,6 +46,20 @@ class LifxWrapper extends EventEmitter {
 
   stop () {
     this._client.stopDiscovery()
+  }
+
+  turnLightOn (lightId) {
+    if (!this._client) {
+      return
+    }
+
+    const light = this._client.light(lightId)
+
+    if (!light) {
+      return
+    }
+
+    light.on()
   }
 }
 
