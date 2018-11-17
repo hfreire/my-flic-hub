@@ -16,30 +16,30 @@
   },
   "homepage": "https://github.com/hfreire/my-flic-hub#readme",
   "dependencies": {
-    "health-checkup": "1.0.19",
+    "health-checkup": "1.0.21",
     "lodash": "4.17.11",
-    "modern-logger": "1.5.28",
+    "modern-logger": "1.5.29",
     "node-lifx": "0.8.0",
-    "sequelize": "4.41.0",
-    "serverful": "1.4.5",
-    "sqlite3": "4.0.3"
+    "sequelize": "4.41.2",
+    "serverful": "1.4.21",
+    "sqlite3": "4.0.4"
   },
   "devDependencies": {
-    "coveralls": "2.13.3",
-    "eslint": "5.0.1",
+    "coveralls": "3.0.2",
+    "eslint": "5.9.0",
     "eslint-config-hfreire": "1.1.3",
-    "eslint-plugin-import": "2.13.0",
-    "eslint-plugin-jest": "21.26.2",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-jest": "22.0.0",
     "eslint-plugin-json": "1.2.1",
     "eslint-plugin-mocha": "5.2.0",
     "eslint-plugin-node": "8.0.0",
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-standard": "4.0.0",
     "eslint-plugin-unicorn": "6.0.1",
-    "jest": "22.4.2",
+    "jest": "23.6.0",
     "npm-merge-driver": "2.3.5",
     "pre-git": "3.17.1",
-    "semantic-release": "15.10.6"
+    "semantic-release": "15.12.0"
   },
   "config": {
     "pre-git": {
