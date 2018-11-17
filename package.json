@@ -47,6 +47,7 @@
       "allow-untracked-files": true
     }
   },
+  "snyk": true,
   "jest": {
     "testEnvironment": "node",
     "setupTestFrameworkScriptFile": "./test/helper.js",
@@ -75,6 +76,8 @@
   "scripts": {
     "eslint": "./node_modules/.bin/eslint --ext .json --ext .js .",
     "jest": "./node_modules/.bin/jest",
+    "snyk:test": "./node_modules/.bin/snyk test",
+    "snyk:protect": "./node_modules/.bin/snyk protect",
     "docker:build": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/build",
     "docker:push": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/push",
     "docker:test": "./share/docker/scripts/test",
@@ -83,10 +86,12 @@
     "semantic-release": "./node_modules/.bin/semantic-release",
     "clean": "rm -rf coverage",
     "lint": "npm run eslint",
+    "prepare": "npm run snyk:protect",
     "test": "npm run clean && npm run lint && npm run jest",
     "commit": "./node_modules/.bin/commit-wizard",
     "build": "npm run docker:build",
     "push": "npm run docker:push",
+    "deploy": "npm run terraform:deploy",
     "start": "node src/app.js"
   }
 }
