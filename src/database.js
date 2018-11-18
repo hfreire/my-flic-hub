@@ -34,14 +34,14 @@ class Database {
 
     this._models = {
       buttons: this._sequelize.define('buttons', {
-        id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
+        id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         bdAddr: { type: Sequelize.STRING, allowNull: false },
-        clickActionId: { type: Sequelize.UUID },
-        doubleClickActionId: { type: Sequelize.UUID },
-        holdActionId: { type: Sequelize.UUID }
+        clickActionId: { type: Sequelize.INTEGER },
+        doubleClickActionId: { type: Sequelize.INTEGER },
+        holdActionId: { type: Sequelize.INTEGER }
       }),
       actions: this._sequelize.define('actions', {
-        id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4, allowNull: false },
+        id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         type: { type: Sequelize.STRING, allowNull: false },
         parameters: {
           type: Sequelize.TEXT,
@@ -66,6 +66,10 @@ class Database {
   }
 
   async start () {
+    if (this._started) {
+      return
+    }
+
     try {
       statSync(this._options.database.pathDir)
     } catch (ignored) {
@@ -75,6 +79,18 @@ class Database {
     await this._sequelize.authenticate()
 
     _.forEach(_.keys(this._models), async (modelName) => this._models[ modelName ].sync())
+
+    this._started = true
+  }
+
+  async stop () {
+    if (!this._started) {
+      return
+    }
+
+    delete this._started
+
+    return this._sequelize.close()
   }
 }
 

@@ -48,18 +48,44 @@ class LifxWrapper extends EventEmitter {
     this._client.stopDiscovery()
   }
 
-  turnLightOn (lightId) {
-    if (!this._client) {
-      return
-    }
+  togglePower (lightId) {
+    return new Promise((resolve, reject) => {
+      if (!this._client) {
+        reject(new Error('not started'))
 
-    const light = this._client.light(lightId)
+        return
+      }
 
-    if (!light) {
-      return
-    }
+      const light = this._client.light(lightId)
 
-    light.on()
+      if (!light) {
+        reject(new Error(`not light with id ${lightId}`))
+
+        return
+      }
+
+      light.getPower((error, power) => {
+        if (error) {
+          reject(error)
+
+          return
+        }
+
+        if (power) {
+          light.off(0, (error) => {
+            if (error) {
+              reject(error)
+            }
+          })
+        } else {
+          light.on(0, (error) => {
+            if (error) {
+              reject(error)
+            }
+          })
+        }
+      })
+    })
   }
 }
 
