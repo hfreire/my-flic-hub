@@ -36,21 +36,22 @@ class Database {
       buttons: this._sequelize.define('buttons', {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         bdAddr: { type: Sequelize.STRING, allowNull: false },
-        singleClickActionId: { type: Sequelize.INTEGER },
-        doubleClickActionId: { type: Sequelize.INTEGER },
-        holdActionId: { type: Sequelize.INTEGER }
+        singleClickId: { type: Sequelize.INTEGER },
+        doubleClickId: { type: Sequelize.INTEGER },
+        holdId: { type: Sequelize.INTEGER }
       }),
-      actions: this._sequelize.define('actions', {
+      clicks: this._sequelize.define('clicks', {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         type: { type: Sequelize.STRING, allowNull: false },
-        parameters: {
+        action: { type: Sequelize.STRING, allowNull: false },
+        data: {
           type: Sequelize.TEXT,
           defaultValue: null,
           get: function () {
-            return !this.getDataValue('parameters') ? null : JSON.parse(this.getDataValue('parameters'))
+            return !this.getDataValue('data') ? null : JSON.parse(this.getDataValue('data'))
           },
           set: function (value) {
-            this.setDataValue('parameters', value === null ? null : JSON.stringify(value))
+            this.setDataValue('data', value === null ? null : JSON.stringify(value))
           }
         }
       })
@@ -61,8 +62,8 @@ class Database {
     return this._models[ 'buttons' ]
   }
 
-  get actions () {
-    return this._models[ 'actions' ]
+  get clicks () {
+    return this._models[ 'clicks' ]
   }
 
   async start () {

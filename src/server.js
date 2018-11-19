@@ -11,13 +11,13 @@ const Logger = require('modern-logger')
 Logger.configure({ enableEmoji: false })
 
 const Database = require('./database')
-const Actions = require('./actions')
+const Clicks = require('./clicks')
 
 class Server extends Serverful {
   async start () {
     await Database.start()
 
-    Actions.start()
+    Clicks.start()
 
     await super.start()
   }
@@ -25,7 +25,7 @@ class Server extends Serverful {
   async stop () {
     await super.stop()
 
-    Actions.stop()
+    Clicks.stop()
 
     await Database.stop()
   }

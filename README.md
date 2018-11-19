@@ -15,7 +15,7 @@ Using it in your terminal requires [Docker](https://www.docker.com) installed in
 ##### Run the Docker image in a container 
 Detach from the container and expose port `3000`.
 ```
-docker run -d --cap-add NET_ADMIN --net=host --volume ./flicd.db:/var/lib/flic/flicd.db --volume ./my-flic-hub.db:/home/node/my-flic-hub/tmp/my-flic-hub.db hfreire/my-flic-hub
+docker run -d --cap-add NET_ADMIN --net=host hfreire/my-flic-hub
 ```
 
 #### Available REST API endpoints

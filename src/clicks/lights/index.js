@@ -5,4 +5,4 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
-module.exports = require('./actions')
+module.exports = require('./lights')

@@ -15,7 +15,7 @@ const _ = require('lodash')
 const Logger = require('modern-logger')
 const Health = require('health-checkup')
 
-const { FlicClient, FlicConnectionChannel, FlicScanWizard } = require('../share/flic')
+const { FlicClient, FlicConnectionChannel, FlicScanWizard } = require('../../share/flic')
 
 const listenToButton = function (bdAddr) {
   if (!bdAddr) {
@@ -28,6 +28,8 @@ const listenToButton = function (bdAddr) {
   this._client.addConnectionChannel(connectionChannel)
 
   connectionChannel.on('buttonSingleOrDoubleClickOrHold', (clickType, wasQueued, timeDiff) => {
+    Logger.debug(`${clickType} ${bdAddr}`)
+
     if (wasQueued) {
       Logger.debug(`Discarding ${clickType} from button ${bdAddr} because it was queued`)
 

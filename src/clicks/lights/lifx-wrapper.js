@@ -15,7 +15,8 @@ const Health = require('health-checkup')
 
 const defaultOptions = {
   lifx: {
-    startDiscovery: false
+    startDiscovery: false,
+    lightOfflineTolerance: 16
   }
 }
 
@@ -48,7 +49,7 @@ class LifxWrapper extends EventEmitter {
     this._client.stopDiscovery()
   }
 
-  togglePower (lightId) {
+  togglePower (lightId, fadeDuration = 0) {
     return new Promise((resolve, reject) => {
       if (!this._client) {
         reject(new Error('not started'))
@@ -72,18 +73,90 @@ class LifxWrapper extends EventEmitter {
         }
 
         if (power) {
-          light.off(0, (error) => {
+          light.off(fadeDuration, (error) => {
             if (error) {
               reject(error)
+
+              return
             }
+
+            resolve()
           })
         } else {
-          light.on(0, (error) => {
+          light.on(fadeDuration, (error) => {
             if (error) {
               reject(error)
+
+              return
             }
+
+            resolve()
           })
         }
+      })
+    })
+  }
+
+  powerOn (lightId, fadeDuration = 0, color = {}) {
+    return new Promise((resolve, reject) => {
+      if (!this._client) {
+        reject(new Error('not started'))
+
+        return
+      }
+
+      const light = this._client.light(lightId)
+
+      if (!light) {
+        reject(new Error(`not light with id ${lightId}`))
+
+        return
+      }
+
+      light.getState((error, state) => {
+        if (error) {
+          reject(error)
+
+          return
+        }
+
+        if (!state.power) {
+          resolve()
+        }
+
+        const { hue, saturation, brightness, kelvin } = _.defaultsDeep({}, color, state.color)
+
+        if (_.isEmpty(color) || _.isEqual(color, state.color)) {
+          light.on(fadeDuration, (error) => {
+            if (error) {
+              reject(error)
+
+              return
+            }
+
+            resolve()
+          })
+
+          return
+        }
+
+        light.color(hue, saturation, brightness, kelvin, fadeDuration, (error) => {
+          if (error) {
+            reject(error)
+
+            return
+          }
+
+          light.on(fadeDuration, (error) => {
+            if (error) {
+              reject(error)
+
+              return
+            }
+
+            resolve()
+          })
+        })
       })
     })
   }
