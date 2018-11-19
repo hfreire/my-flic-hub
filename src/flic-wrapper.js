@@ -27,7 +27,7 @@ const listenToButton = function (bdAddr) {
   const connectionChannel = new FlicConnectionChannel(bdAddr)
   this._client.addConnectionChannel(connectionChannel)
 
-  connectionChannel.on('buttonUpOrDown', (clickType, wasQueued, timeDiff) => {
+  connectionChannel.on('buttonSingleOrDoubleClickOrHold', (clickType, wasQueued, timeDiff) => {
     if (wasQueued) {
       Logger.debug(`Discarding ${clickType} from button ${bdAddr} because it was queued`)
 
@@ -93,10 +93,6 @@ class FlicWrapper extends EventEmitter {
   }
 
   start () {
-    if (this._client) {
-      return
-    }
-
     this._client = new FlicClient(_.get(this._options, 'flic.server.host'), _.get(this._options, 'flic.server.port'))
 
     this._client.once('ready', () => {
@@ -118,10 +114,6 @@ class FlicWrapper extends EventEmitter {
   }
 
   stop () {
-    if (!this._client) {
-      return
-    }
-
     this._client.cancelScanWizard(this._scanWizard)
 
     this._client.close()

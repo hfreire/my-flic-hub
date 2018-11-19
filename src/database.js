@@ -36,7 +36,7 @@ class Database {
       buttons: this._sequelize.define('buttons', {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         bdAddr: { type: Sequelize.STRING, allowNull: false },
-        clickActionId: { type: Sequelize.INTEGER },
+        singleClickActionId: { type: Sequelize.INTEGER },
         doubleClickActionId: { type: Sequelize.INTEGER },
         holdActionId: { type: Sequelize.INTEGER }
       }),
@@ -66,10 +66,6 @@ class Database {
   }
 
   async start () {
-    if (this._started) {
-      return
-    }
-
     try {
       statSync(this._options.database.pathDir)
     } catch (ignored) {
@@ -79,17 +75,9 @@ class Database {
     await this._sequelize.authenticate()
 
     _.forEach(_.keys(this._models), async (modelName) => this._models[ modelName ].sync())
-
-    this._started = true
   }
 
   async stop () {
-    if (!this._started) {
-      return
-    }
-
-    delete this._started
-
     return this._sequelize.close()
   }
 }

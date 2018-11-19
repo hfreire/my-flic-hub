@@ -57,7 +57,7 @@ RUN apk --no-cache add \
   && rm /tmp/flicd.zip \
   && apk del .flicd-deps
 
-EXPOSE 3000 5551
+EXPOSE 3000
 
 ENTRYPOINT [ "./start.sh" ]
 

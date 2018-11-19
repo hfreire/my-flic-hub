@@ -5,6 +5,4 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
-const Actions = require('./actions')
-
-module.exports = new Actions()
+module.exports = require('./actions')
