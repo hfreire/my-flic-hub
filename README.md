@@ -13,7 +13,7 @@
 Using it in your terminal requires [Docker](https://www.docker.com) installed in your system.
 
 ##### Run the Docker image in a container 
-Detach from the container and expose port `3000`.
+Detach from the container and use the host's network stack.
 ```
 docker run -d --cap-add NET_ADMIN --net=host hfreire/my-flic-hub
 ```
