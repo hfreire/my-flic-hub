@@ -5,8 +5,6 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
-const _ = require('lodash')
-
 const Logger = require('modern-logger')
 
 const Database = require('../database')

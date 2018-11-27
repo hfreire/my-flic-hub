@@ -16,7 +16,8 @@ const Health = require('health-checkup')
 const defaultOptions = {
   lifx: {
     startDiscovery: false,
-    lightOfflineTolerance: 16
+    lightOfflineTolerance: 16,
+    resendMaxTimes: 9
   }
 }
 
