@@ -1,3 +1,4 @@
+FROM hypriot/qemu-register as qemu
 FROM arm32v6/node:10.13-alpine
 
 MAINTAINER hugo@exec.sh
@@ -13,7 +14,6 @@ ENV VERSION_COMMIT $VERSION_COMMIT
 ARG VERSION_BUILD_DATE
 ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 
-FROM hypriot/qemu-register as qemu
 COPY --from=qemu /qemu-arm /usr/bin/qemu-arm-static
 
 # Create app directory
