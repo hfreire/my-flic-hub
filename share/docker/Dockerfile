@@ -13,6 +13,9 @@ ENV VERSION_COMMIT $VERSION_COMMIT
 ARG VERSION_BUILD_DATE
 ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 
+FROM hypriot/qemu-register as qemu
+COPY --from=qemu /qemu-arm /usr/bin/qemu-arm-static
+
 # Create app directory
 RUN mkdir -p /home/node/$NAME \
   && chown node:node /home/node/$NAME
