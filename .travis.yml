@@ -30,8 +30,8 @@ script:
   - |
     npm test && \
     docker run --rm --privileged multiarch/qemu-user-static:register --reset && \
-    travis_wait 40 npm run build && \
-    travis_wait 40 npm run docker:test
+    npm run build && \
+    npm run docker:test
 after_success:
   - npm run coveralls
   - npm run semantic-release

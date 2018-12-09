@@ -42,6 +42,7 @@ RUN apk --no-cache add --virtual .npm-deps \
     make \
     python \
     git \
+  && su-exec node npm install sqlite3 --node_sqlite3_binary_host_mirror=https://raw.githubusercontent.com/hfreire/my-flic-hub/master/share/npm/ \
   && su-exec node npm install --production \
   && apk del .npm-deps
 
