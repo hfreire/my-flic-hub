@@ -2,7 +2,7 @@
 
 ./start.sh &
 
-sleep 10
+sleep 60
 
 curl \
 --silent \
