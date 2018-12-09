@@ -20,7 +20,6 @@ notifications:
     on_failure: always
     on_pull_requests: false
 before_install:
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - npm install -g greenkeeper-lockfile@1
 install:
   - npm install
@@ -30,7 +29,8 @@ before_script:
 script:
   - |
     npm test && \
-    travis_wait npm run build && \
+    docker run --rm --privileged multiarch/qemu-user-static:register --reset && \
+    travis_wait 30 npm run build && \
     npm run docker:test
 after_success:
   - npm run coveralls
