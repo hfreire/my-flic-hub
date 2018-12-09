@@ -29,12 +29,6 @@ class LifxWrapper extends EventEmitter {
 
     this._client = new Client()
 
-    this._client.init(_.get(this._options, 'lifx'))
-
-    this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
-    this._client.on('light-online', (light) => this.emit('LightOnline', light))
-    this._client.on('light-offline', (light) => this.emit('LightOffline', light))
-
     Health.addCheck('lifx', async () => {
       if (!this._client) {
         throw new Error('Unable to connect to lifx lights')
@@ -43,6 +37,12 @@ class LifxWrapper extends EventEmitter {
   }
 
   start () {
+    this._client.init(_.get(this._options, 'lifx'))
+
+    this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
+    this._client.on('light-online', (light) => this.emit('LightOnline', light))
+    this._client.on('light-offline', (light) => this.emit('LightOffline', light))
+
     this._client.startDiscovery()
   }
 
