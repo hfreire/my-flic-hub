@@ -97,6 +97,8 @@ class FlicWrapper extends EventEmitter {
   start () {
     this._client = new FlicClient(_.get(this._options, 'flic.server.host'), _.get(this._options, 'flic.server.port'))
 
+    this._client.on('error', (error) => Logger.error(error))
+
     this._client.once('ready', () => {
       Logger.debug('Connected to flic server')
 
@@ -105,8 +107,6 @@ class FlicWrapper extends EventEmitter {
       this._client.on('newVerifiedButton', (bdAddr) => listenToButton.bind(this)(bdAddr))
 
       this._client.on('bluetoothControllerStateChange', (state) => Logger.info('Bluetooth controller state change: ' + state))
-
-      this._client.on('error', (error) => Logger.error(error))
 
       this._client.on('close', () => Logger.info('Disconnected from flic server'))
     })
