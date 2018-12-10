@@ -27,8 +27,6 @@ class LifxWrapper extends EventEmitter {
 
     this._options = _.defaultsDeep({}, options, defaultOptions)
 
-    this._client = new Client()
-
     Health.addCheck('lifx', async () => {
       if (!this._client) {
         throw new Error('Unable to connect to lifx lights')
@@ -37,6 +35,8 @@ class LifxWrapper extends EventEmitter {
   }
 
   start () {
+    this._client = new Client()
+
     this._client.init(_.get(this._options, 'lifx'))
 
     this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
