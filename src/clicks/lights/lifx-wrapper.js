@@ -9,8 +9,9 @@ const EventEmitter = require('events')
 
 const _ = require('lodash')
 
-const { Client } = require('node-lifx')
+const { Client, utils } = require('node-lifx')
 
+const Logger = require('modern-logger')
 const Health = require('health-checkup')
 
 const defaultOptions = {
@@ -35,15 +36,26 @@ class LifxWrapper extends EventEmitter {
   }
 
   start () {
+    // TODO: temporary workaround to make sure docker test works in qemu, otherwise would throw "A system error occurred: uv_interface_addresses returned Unknown system error 96 (Unknown system error 96)"
+    try {
+      utils.getHostIPs()
+    } catch (error) {
+      return
+    }
+
     this._client = new Client()
 
+    this._client.on('error', (error) => Logger.error(error))
+
+    this._client.on('listening', () => {
+      this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
+      this._client.on('light-online', (light) => this.emit('LightOnline', light))
+      this._client.on('light-offline', (light) => this.emit('LightOffline', light))
+
+      this._client.startDiscovery()
+    })
+
     this._client.init(_.get(this._options, 'lifx'))
-
-    this._client.on('light-new', (light) => this.emit('LightDiscovered', light))
-    this._client.on('light-online', (light) => this.emit('LightOnline', light))
-    this._client.on('light-offline', (light) => this.emit('LightOffline', light))
-
-    this._client.startDiscovery()
   }
 
   stop () {
