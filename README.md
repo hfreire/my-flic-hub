@@ -1,4 +1,4 @@
-#
+# My :dizzy: own flic hub for the :earth_africa: world's smartest :red_circle: button
 
 [![Build Status](https://travis-ci.org/hfreire/my-flic-hub.svg?branch=master)](https://travis-ci.org/hfreire/my-flic-hub)
 [![Coverage Status](https://coveralls.io/repos/github/hfreire/my-flic-hub/badge.svg?branch=master)](https://coveralls.io/github/hfreire/my-flic-hub?branch=master)
@@ -6,6 +6,8 @@
 [![](https://img.shields.io/github/release/hfreire/my-flic-hub.svg)](https://github.com/hfreire/my-flic-hub/releases)
 [![Docker Stars](https://img.shields.io/docker/stars/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/) 
+
+> Control all your home flic buttons without the [flic app](https://itunes.apple.com/us/app/flic-app/id977593793) or a [flic hub](https://flic.io/flic-hub).
 
 ### How to use
 
@@ -19,7 +21,7 @@ docker run -d --cap-add NET_ADMIN --net=host hfreire/my-flic-hub
 ```
 
 #### Available REST API endpoints
-Swagger documentation available at `http://localhost:6731/docs`.
+Swagger documentation available at `http://localhost:3000/docs`.
 
 #### Available usage environment variables
 Variable | Description | Required | Default value
