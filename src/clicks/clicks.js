@@ -9,7 +9,7 @@ const Logger = require('modern-logger')
 
 const Database = require('../database')
 
-const FlicWrapper = require('./flic-wrapper')
+const FlicWrapper = require('../flic-wrapper')
 const Lights = require('./lights')
 
 const findButtonByBdAddr = async (bdAddr) => {
@@ -95,13 +95,9 @@ class Clicks {
 
   start () {
     Lights.start()
-
-    FlicWrapper.start()
   }
 
   stop () {
-    FlicWrapper.stop()
-
     Lights.stop()
   }
 }

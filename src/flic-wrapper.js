@@ -15,7 +15,7 @@ const _ = require('lodash')
 const Logger = require('modern-logger')
 const Health = require('health-checkup')
 
-const { FlicClient, FlicConnectionChannel, FlicScanWizard } = require('../../share/flic')
+const { FlicClient, FlicConnectionChannel, FlicScanWizard } = require('../share/flic')
 
 const listenToButton = function (bdAddr) {
   if (!bdAddr) {
@@ -50,26 +50,31 @@ const listenToButton = function (bdAddr) {
   })
 }
 
-const buildScanWizard = () => {
-  const scanWizard = new FlicScanWizard()
+const buildAndAddScanWizard = function () {
+  return new Promise((resolve) => {
+    const scanWizard = new FlicScanWizard()
 
-  scanWizard.on('foundPrivateButton', () => {
-    console.log('Your button is private. Hold down for 7 seconds to make it public.')
-  })
-  scanWizard.on('foundPublicButton', (bdAddr, name) => {
-    console.log('Found public button ' + bdAddr + ' (' + name + '). Now connecting...')
-  })
-  scanWizard.on('buttonConnected', (bdAddr, name) => {
-    console.log('Button connected. Now verifying and pairing...')
-  })
-  scanWizard.on('completed', (result, bdAddr, name) => {
-    console.log('Completed with result: ' + result)
-    if (result === 'WizardSuccess') {
-      console.log('Your new button is ' + bdAddr)
-    }
-  })
+    scanWizard.on('foundPrivateButton', () => {
+      console.log('Your button is private. Hold down for 7 seconds to make it public.')
+    })
+    scanWizard.on('foundPublicButton', (bdAddr, name) => {
+      console.log('Found public button ' + bdAddr + ' (' + name + '). Now connecting...')
+    })
+    scanWizard.on('buttonConnected', (bdAddr, name) => {
+      console.log('Button connected. Now verifying and pairing...')
+    })
+    scanWizard.on('completed', (result, bdAddr, name) => {
+      console.log('Completed with result: ' + result)
 
-  return scanWizard
+      if (result === 'WizardSuccess') {
+        console.log('Your new button is ' + bdAddr)
+      }
+
+      resolve({})
+    })
+
+    this._client.addScanWizard(scanWizard)
+  })
 }
 
 const defaultOptions = {
@@ -110,15 +115,14 @@ class FlicWrapper extends EventEmitter {
 
       this._client.on('close', () => Logger.info('Disconnected from flic server'))
     })
-
-    this._scanWizard = buildScanWizard()
-    this._client.addScanWizard(this._scanWizard)
   }
 
   stop () {
-    this._client.cancelScanWizard(this._scanWizard)
-
     this._client.close()
+  }
+
+  scan () {
+    return buildAndAddScanWizard.bind(this)()
   }
 }
 
