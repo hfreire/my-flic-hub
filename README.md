@@ -7,7 +7,7 @@
 [![Docker Stars](https://img.shields.io/docker/stars/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/) 
 
-> Control all your home flic buttons without the [flic app](https://itunes.apple.com/us/app/flic-app/id977593793) or a [flic hub](https://flic.io/flic-hub).
+> Use a [Raspberry Pi](https://www.raspberrypi.org) to control all your home flic buttons without the [flic app](https://itunes.apple.com/us/app/flic-app/id977593793) or a [flic hub](https://flic.io/flic-hub).
 
 ### How to use
 
