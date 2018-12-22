@@ -1,4 +1,4 @@
-# My :dizzy: own flic hub for the :earth_africa: world's smartest :red_circle: button
+# My :raised_hand: own flic hub :tm: for the :earth_africa: world's smartest :red_circle: button
 
 [![Build Status](https://travis-ci.org/hfreire/my-flic-hub.svg?branch=master)](https://travis-ci.org/hfreire/my-flic-hub)
 [![Coverage Status](https://coveralls.io/repos/github/hfreire/my-flic-hub/badge.svg?branch=master)](https://coveralls.io/github/hfreire/my-flic-hub?branch=master)
