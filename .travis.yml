@@ -27,29 +27,19 @@ before_script:
 - npm prune
 - greenkeeper-lockfile-update
 script:
-- 'npm test && \
-
+- |
+  npm test && \
   docker run --rm --privileged multiarch/qemu-user-static:register --reset && \
-
   npm run build && \
-
   npm run docker:test
-
-  '
 after_success:
 - npm run coveralls
 - npm run semantic-release
-- '([ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] || [
-  -n "$TRAVIS_TAG" ]) && \
-
-  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
-  \
-
+- |
+  ([ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] || [ -n "$TRAVIS_TAG" ]) && \
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && \
   npm run push
-
-  '
-- '[ -n "$TRAVIS_TAG" ] && npm run deploy
-
-  '
+- |
+  [ -n "$TRAVIS_TAG" ] && npm run deploy
 after_script:
 - greenkeeper-lockfile-upload
