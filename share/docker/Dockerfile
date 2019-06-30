@@ -17,7 +17,7 @@ ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 COPY --from=hypriot/qemu-register /qemu-arm /usr/bin/qemu-arm-static
 
 # Create app directory
-RUN mkdir -p /home/node/$NAME \
+RUN mkdir /home/node/$NAME \
   && chown node:node /home/node/$NAME
 WORKDIR /home/node/$NAME
 
@@ -56,7 +56,7 @@ RUN apk --no-cache add \
   && echo "19a9f6e8ceff648d7314c3dacf4e034cf77843cf760efd2bb850ffc53c254e79 */tmp/flicd.zip" | sha256sum -c - \
   && unzip -d /tmp /tmp/flicd.zip \
   && mv /tmp/fliclib-linux-hci-$FLICD_VERSION/bin/armv6l/flicd /usr/local/bin/flicd \
-  && mkdir -p /var/lib/flic \
+  && mkdir /var/lib/flic \
   && rm -rf /tmp/fliclib-linux-hci-$FLICD_VERSION \
   && rm /tmp/flicd.zip \
   && apk del .flicd-deps
