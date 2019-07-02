@@ -81,7 +81,6 @@
     "docker:build": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/build",
     "docker:push": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/push",
     "docker:test": "./share/docker/scripts/test",
-    "terraform:deploy": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/terraform/scripts/deploy",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "semantic-release": "./node_modules/.bin/semantic-release",
     "clean": "rm -rf coverage",
@@ -91,7 +90,6 @@
     "commit": "./node_modules/.bin/commit-wizard",
     "build": "npm run docker:build",
     "push": "npm run docker:push",
-    "deploy": "npm run terraform:deploy",
     "start": "node src/app.js"
   }
 }
