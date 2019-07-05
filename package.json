@@ -20,7 +20,7 @@
     "lodash": "4.17.11",
     "modern-logger": "1.5.36",
     "node-lifx": "0.8.0",
-    "sequelize": "5.9.2",
+    "sequelize": "5.9.3",
     "serverful": "1.4.45",
     "sqlite3": "4.0.9"
   },
