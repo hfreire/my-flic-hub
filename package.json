@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/hfreire/my-flic-hub#readme",
   "dependencies": {
-    "health-checkup": "1.0.28",
+    "health-checkup": "1.0.29",
     "lodash": "4.17.13",
     "modern-logger": "1.5.39",
     "node-lifx": "0.8.0",
