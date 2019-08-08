@@ -16,7 +16,7 @@ notifications:
   slack:
     rooms:
       secure: WrZzlHvjggJX8T1I9/6r4O8NpGoz7jkXD7aa9k1ZzQpStQ6M+1libHZOgAQxi3jSn0BdDEuC6CbDOx+JgljZ+gd/1vxXPc0BUDVCUqvXGVRDAYHxJHaeAav27RMc3FsxdQp0vQyu77x6/hQYnu6XpwagKmw51fc2RrHxUvgoqYKA7HaCyeHNXfk3ApeoTnPaAmQeD56Ssxcms3HfyEKRbCLXSJX81pH3kKZUWbzA4RACAuInDxzK8eT+6EDNFV8UvCipnz1y0pPBHY1u8+IyCO2eKMGqoeOWCUXsUd9nvsZscU035lfVexZeaQGQsoB7JdoBM1n3grT/D3UEC89kYP/DwQQMQ+ogfItB96TSqHpl2rcNN8qZvh9MfSDy/eZqyG/QiNt9PkmgYv9eRUrJVBKwu2tZzfYCOwpJMUKeFPtivH1yVnyffQQSEl5+2yvR6TS8sKodQ7oizEFLX7BpOdLVfriMx6pc8tNHeaU2QPSaQK3xd3SvNzksos5ynylQpyULi2LVUqyxDnM4JhroyKGHZCC1uSxxXcBicU+9bjLCJ8DtYWor8YIB90fV7XW0O3rd3Rh39mcQh5s2EaTpBvjsfCFqZp5h12Miuj+lmz+Ql5jAxjZwqJSiLJ3jArz/7tuuCflWo//VuBXqGGk1BWDoOHEuvAqe9NR5o/x09q8=
-    on_success: change
+    on_success: never
     on_pull_requests: false
 before_install:
 - npm install -g greenkeeper-lockfile@1
