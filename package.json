@@ -18,7 +18,7 @@
   "dependencies": {
     "health-checkup": "1.0.32",
     "lodash": "4.17.15",
-    "modern-logger": "1.5.49",
+    "modern-logger": "1.5.50",
     "node-lifx": "0.8.0",
     "sequelize": "5.17.1",
     "serverful": "1.4.49",
