@@ -22,7 +22,7 @@
     "node-lifx": "0.8.0",
     "sequelize": "5.19.3",
     "serverful": "1.4.49",
-    "sqlite3": "4.0.9"
+    "sqlite3": "4.1.1"
   },
   "devDependencies": {
     "coveralls": "3.0.6",
