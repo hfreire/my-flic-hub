@@ -1,11 +1,13 @@
 # My own flic hub :tm: for the :earth_africa: world's smartest :red_circle: button
 
+[![](https://github.com/hfreire/my-flic-hub/workflows/ci/badge.svg)](https://github.com/hfreire/my-flic-hub/actions?workflow=ci)
+[![](https://github.com/hfreire/my-flic-hub/workflows/cd/badge.svg)](https://github.com/hfreire/my-flic-hub/actions?workflow=cd)
 [![Build Status](https://travis-ci.org/hfreire/my-flic-hub.svg?branch=master)](https://travis-ci.org/hfreire/my-flic-hub)
 [![Coverage Status](https://coveralls.io/repos/github/hfreire/my-flic-hub/badge.svg?branch=master)](https://coveralls.io/github/hfreire/my-flic-hub?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/hfreire/my-flic-hub/badge.svg)](https://snyk.io/test/github/hfreire/my-flic-hub)
 [![](https://img.shields.io/github/release/hfreire/my-flic-hub.svg)](https://github.com/hfreire/my-flic-hub/releases)
 [![Docker Stars](https://img.shields.io/docker/stars/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/hfreire/my-flic-hub.svg)](https://hub.docker.com/r/hfreire/my-flic-hub/)
 
 > Use a [Raspberry Pi](https://www.raspberrypi.org) to control all your home flic buttons without the [flic app](https://itunes.apple.com/us/app/flic-app/id977593793) or a [flic hub](https://flic.io/flic-hub).
 
@@ -14,7 +16,7 @@
 #### Use it in your terminal
 Using it in your terminal requires [Docker](https://www.docker.com) installed in your system.
 
-##### Run the Docker image in a container 
+##### Run the Docker image in a container
 Detach from the container and use the host's network stack.
 ```
 docker run -d --cap-add NET_ADMIN --net=host hfreire/my-flic-hub
@@ -53,7 +55,7 @@ npm run build
 ```
 
 ### How to contribute
-You can contribute either with code (e.g., new features, bug fixes and documentation) or by [donating 5 EUR](https://paypal.me/hfreire/5). You can read the [contributing guidelines](CONTRIBUTING.md) for instructions on how to contribute with code. 
+You can contribute either with code (e.g., new features, bug fixes and documentation) or by [donating 5 EUR](https://paypal.me/hfreire/5). You can read the [contributing guidelines](CONTRIBUTING.md) for instructions on how to contribute with code.
 
 All donation proceedings will go to the [Sverige för UNHCR](https://sverigeforunhcr.se), a swedish partner of the [UNHCR - The UN Refugee Agency](http://www.unhcr.org), a global organisation dedicated to saving lives, protecting rights and building a better future for refugees, forcibly displaced communities and stateless people.
 

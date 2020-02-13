@@ -1,50 +1,61 @@
-FROM arm32v6/node:10.13-alpine
-
-MAINTAINER hugo@exec.sh
-
-# Set app runtime environment variables
-ARG NPM_TOKEN
-ARG NAME
-ENV NAME $NAME
-ARG VERSION
-ENV VERSION $VERSION
-ARG VERSION_COMMIT
-ENV VERSION_COMMIT $VERSION_COMMIT
-ARG VERSION_BUILD_DATE
-ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
+FROM arm32v6/node:10.13-alpine AS node
 
 # Copy qemu arm binary
 COPY --from=hypriot/qemu-register /qemu-arm /usr/bin/qemu-arm-static
 
-# Create app directory
-RUN mkdir /home/node/$NAME \
-  && chown node:node /home/node/$NAME
+# Install base utils
+RUN set -x \
+  && apk --no-cache add \
+    su-exec
+
+FROM node AS build
+ARG NAME
+ARG NPM_TOKEN
+
+RUN su-exec node mkdir /home/node/$NAME
 WORKDIR /home/node/$NAME
 
-# Install utils
-RUN apk --no-cache add \
-    su-exec \
+# Install npm packages
+COPY --chown=node:node package.json package-lock.json .snyk ./
+RUN set -x \
+  && apk --no-cache add --virtual .npm-deps \
+      g++ \
+      libc-dev \
+      make \
+      python \
+      git \
+  && NODE_ENV= su-exec node npm install sqlite3 --node_sqlite3_binary_host_mirror=https://raw.githubusercontent.com/hfreire/my-flic-hub/master/share/npm/ \
+  && NODE_ENV= su-exec node npm ci \
+  && apk del .npm-deps
+
+# Build app
+COPY --chown=node:node src src/
+RUN set -x \
+  && su-exec node npm run build --if-present \
+  && su-exec node npm prune --production \
+  && su-exec node npm cache clean --force
+
+FROM node
+LABEL maintainer="hugo@exec.sh"
+ARG NAME
+ARG VERSION
+ARG VERSION_COMMIT
+ARG VERSION_BUILD_DATE
+
+# Install base utils
+RUN set -x \
+  && apk --no-cache add \
     curl \
     netcat-openbsd
 
-# Copy app source
-COPY --chown=node:node package.json package.json
-COPY --chown=node:node package-lock.json package-lock.json
-COPY --chown=node:node src src/
+RUN su-exec node mkdir /home/node/$NAME
+WORKDIR /home/node/$NAME
+
+# Copy app build
+COPY --from=build --chown=node:node /home/node/$NAME /home/node/$NAME
 COPY --chown=node:node share/flic share/flic/
 COPY --chown=node:node share/docker/start.sh start.sh
 COPY --chown=node:node share/docker/test.sh test.sh
-
-# Install npm packages
-RUN apk --no-cache add --virtual .npm-deps \
-    g++ \
-    libc-dev \
-    make \
-    python \
-    git \
-  && su-exec node npm install sqlite3 --node_sqlite3_binary_host_mirror=https://raw.githubusercontent.com/hfreire/my-flic-hub/master/share/npm/ --production \
-  && su-exec node npm install --production \
-  && apk del .npm-deps
 
 # Install flicd
 ENV FLICD_VERSION 0.5
