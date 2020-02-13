@@ -2,7 +2,6 @@
 
 [![](https://github.com/hfreire/my-flic-hub/workflows/ci/badge.svg)](https://github.com/hfreire/my-flic-hub/actions?workflow=ci)
 [![](https://github.com/hfreire/my-flic-hub/workflows/cd/badge.svg)](https://github.com/hfreire/my-flic-hub/actions?workflow=cd)
-[![Build Status](https://travis-ci.org/hfreire/my-flic-hub.svg?branch=master)](https://travis-ci.org/hfreire/my-flic-hub)
 [![Coverage Status](https://coveralls.io/repos/github/hfreire/my-flic-hub/badge.svg?branch=master)](https://coveralls.io/github/hfreire/my-flic-hub?branch=master)
 [![Known Vulnerabilities](https://snyk.io/test/github/hfreire/my-flic-hub/badge.svg)](https://snyk.io/test/github/hfreire/my-flic-hub)
 [![](https://img.shields.io/github/release/hfreire/my-flic-hub.svg)](https://github.com/hfreire/my-flic-hub/releases)
