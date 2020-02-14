@@ -1,9 +1,9 @@
 {
   "name": "my-flic-hub",
-  "description": "",
+  "description": "My own flic hub for the world's smartest button",
   "version": "0.0.0",
   "engines": {
-    "node": ">= 10.11"
+    "node": ">= 10.15"
   },
   "author": "Hugo Freire <hugo@exec.sh>",
   "license": "MIT",
@@ -71,7 +71,8 @@
         "npmPublish": false
       },
       "@semantic-release/github"
-    ]
+    ],
+    "analyzeCommits": "simple-commit-message"
   },
   "scripts": {
     "eslint": "./node_modules/.bin/eslint --ext .json --ext .js .",
