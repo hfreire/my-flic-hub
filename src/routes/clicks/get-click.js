@@ -7,7 +7,7 @@
 
 const { Route } = require('serverful')
 
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const Database = require('../../database')
 
