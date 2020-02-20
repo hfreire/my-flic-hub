@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Hugo Freire <hugo@exec.sh>.
+ * Copyright (c) 2020, Hugo Freire <hugo@exec.sh>.
  *
  * This source code is licensed under the license found in the
  * LICENSE.md file in the root directory of this source tree.
@@ -23,13 +23,13 @@ class GetClick extends Route {
   }
 
   validate () {
-    return {
+    return Joi.object({
       params: {
         id: Joi.number()
           .required()
           .description('button id')
       }
-    }
+    })
   }
 }
 

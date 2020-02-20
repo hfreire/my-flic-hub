@@ -1,4 +1,4 @@
-FROM arm32v6/node:10.13-alpine AS node
+FROM arm32v6/node:13.1.0-alpine AS node
 
 # Copy qemu arm binary
 COPY --from=hypriot/qemu-register /qemu-arm /usr/bin/qemu-arm-static
@@ -6,56 +6,9 @@ COPY --from=hypriot/qemu-register /qemu-arm /usr/bin/qemu-arm-static
 # Install base utils
 RUN set -x \
   && apk --no-cache add \
-    su-exec
-
-FROM node AS build
-ARG NAME
-ARG NPM_TOKEN
-
-RUN su-exec node mkdir /home/node/$NAME
-WORKDIR /home/node/$NAME
-
-# Install npm packages
-COPY --chown=node:node package.json package-lock.json .snyk ./
-RUN set -x \
-  && apk --no-cache add --virtual .npm-deps \
-      g++ \
-      libc-dev \
-      make \
-      python \
-      git \
-  && NODE_ENV= su-exec node npm install sqlite3 --node_sqlite3_binary_host_mirror=https://raw.githubusercontent.com/hfreire/my-flic-hub/master/share/npm/ \
-  && NODE_ENV= su-exec node npm ci \
-  && apk del .npm-deps
-
-# Build app
-COPY --chown=node:node src src/
-RUN set -x \
-  && su-exec node npm run build --if-present \
-  && su-exec node npm prune --production \
-  && su-exec node npm cache clean --force
-
-FROM node
-LABEL maintainer="hugo@exec.sh"
-ARG NAME
-ARG VERSION
-ARG VERSION_COMMIT
-ARG VERSION_BUILD_DATE
-
-# Install base utils
-RUN set -x \
-  && apk --no-cache add \
+    su-exec \
     curl \
     netcat-openbsd
-
-RUN su-exec node mkdir /home/node/$NAME
-WORKDIR /home/node/$NAME
-
-# Copy app build
-COPY --from=build --chown=node:node /home/node/$NAME /home/node/$NAME
-COPY --chown=node:node share/flic share/flic/
-COPY --chown=node:node share/docker/start.sh start.sh
-COPY --chown=node:node share/docker/test.sh test.sh
 
 # Install flicd
 ENV FLICD_VERSION 0.5
@@ -71,6 +24,55 @@ RUN apk --no-cache add \
   && rm -rf /tmp/fliclib-linux-hci-$FLICD_VERSION \
   && rm /tmp/flicd.zip \
   && apk del .flicd-deps
+
+FROM node AS prebuild
+
+RUN apk --no-cache add \
+    g++ \
+    libc-dev \
+    make \
+    python \
+    git
+
+FROM prebuild AS build
+ARG NAME
+ARG NPM_TOKEN
+
+RUN su-exec node mkdir /home/node/$NAME
+WORKDIR /home/node/$NAME
+
+# Install npm packages
+COPY --chown=node:node package.json package-lock.json .snyk ./
+RUN set -x \
+  && NODE_ENV= su-exec node npm ci
+
+# Build app
+COPY --chown=node:node src src/
+RUN set -x \
+  && su-exec node npm run build --if-present \
+  && su-exec node npm prune --production \
+  && su-exec node npm cache clean --force
+
+FROM node
+LABEL maintainer="hugo@exec.sh"
+ARG NAME
+ARG VERSION
+ARG VERSION_COMMIT
+ARG VERSION_BUILD_DATE
+
+RUN su-exec node mkdir /home/node/$NAME
+WORKDIR /home/node/$NAME
+
+# Copy app build
+COPY --from=build --chown=node:node /home/node/$NAME /home/node/$NAME
+COPY --chown=node:node share/flic share/flic/
+COPY --chown=node:node share/docker/start.sh start.sh
+COPY --chown=node:node share/docker/test.sh test.sh
+
+ENV NAME $NAME
+ENV VERSION $VERSION
+ENV VERSION_COMMIT $VERSION_COMMIT
+ENV VERSION_BUILD_DATE $VERSION_BUILD_DATE
 
 EXPOSE 3000
 
