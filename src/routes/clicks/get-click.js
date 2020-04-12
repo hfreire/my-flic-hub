@@ -23,13 +23,13 @@ class GetClick extends Route {
   }
 
   validate () {
-    return Joi.object({
-      params: {
+    return {
+      params: Joi.object({
         id: Joi.number()
           .required()
           .description('button id')
-      }
-    })
+      })
+    }
   }
 }
 

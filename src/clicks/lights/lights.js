@@ -13,9 +13,9 @@ const LifxWrapper = require('./lifx-wrapper')
 
 class Lights {
   constructor () {
-    LifxWrapper.on('LightOnline', (light) => Logger.debug(`LightOnline ${light.id}`))
-    LifxWrapper.on('LightOffline', (light) => Logger.debug(`LightOffline ${light.id}`))
-    LifxWrapper.on('LightDiscovered', (light) => Logger.debug(`Discovered new light with id ${light.id}`))
+    LifxWrapper.on('LightOnline', (light) => Logger.debug(`LightOnline ${light.id} ${light.address}`))
+    LifxWrapper.on('LightOffline', (light) => Logger.debug(`LightOffline ${light.id} ${light.address}`))
+    LifxWrapper.on('LightDiscovered', (light) => Logger.debug(`Discovered new light with id ${light.id} ${light.address}`))
   }
 
   handleClick (click) {
