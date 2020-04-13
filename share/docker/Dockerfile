@@ -11,13 +11,13 @@ RUN set -x \
     netcat-openbsd
 
 # Install flicd
-ENV FLICD_VERSION 0.5
+ENV FLICD_VERSION 2.0.2
 RUN apk --no-cache add \
     libc6-compat \
   && apk --no-cache add --virtual .flicd-deps \
     unzip \
   && curl -fSL "https://github.com/50ButtonsEach/fliclib-linux-hci/archive/$FLICD_VERSION.zip" -o /tmp/flicd.zip \
-  && echo "19a9f6e8ceff648d7314c3dacf4e034cf77843cf760efd2bb850ffc53c254e79 */tmp/flicd.zip" | sha256sum -c - \
+  && echo "e1da77d45ab77d77d3aba50180d697fcb208a19517cde87b5295fc474fd1e7b6 */tmp/flicd.zip" | sha256sum -c - \
   && unzip -d /tmp /tmp/flicd.zip \
   && mv /tmp/fliclib-linux-hci-$FLICD_VERSION/bin/armv6l/flicd /usr/local/bin/flicd \
   && mkdir /var/lib/flic \
