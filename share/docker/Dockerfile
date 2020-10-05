@@ -1,4 +1,4 @@
-FROM arm32v6/node:14.11.0-alpine AS node
+FROM arm32v6/node:14.12.0-alpine AS node
 
 # Copy qemu arm binary
 COPY --from=hypriot/qemu-register /qemu-arm /usr/bin/qemu-arm-static
