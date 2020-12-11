@@ -21,7 +21,7 @@
     "modern-logger": "1.5.83",
     "node-lifx": "0.8.0",
     "sequelize": "6.3.5",
-    "serverful": "1.4.86",
+    "serverful": "1.4.87",
     "sqlite3": "5.0.0"
   },
   "devDependencies": {
