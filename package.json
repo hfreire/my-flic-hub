@@ -25,7 +25,6 @@
     "sqlite3": "5.0.2"
   },
   "devDependencies": {
-    "coveralls": "3.1.0",
     "eslint": "6.8.0",
     "eslint-config-hfreire": "2.0.7",
     "eslint-plugin-import": "2.22.1",
@@ -82,7 +81,6 @@
     "docker:build": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/build",
     "docker:push": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/push",
     "docker:test": "DOCKER_REPO=hfreire NAME=$npm_package_name ./share/docker/scripts/test",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "semantic-release": "./node_modules/.bin/semantic-release",
     "clean": "rm -rf coverage",
     "lint": "npm run eslint",
